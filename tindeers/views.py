@@ -1,6 +1,7 @@
 from django.shortcuts import render,HttpResponse
 import json
-from pennapps import Ziggeo
+from tindeers.models import Product
+
 
 # No server side Ziggeo should be need at the time
 # Can get the video merely with the id which is gotten
