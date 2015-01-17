@@ -94,7 +94,7 @@ def vote(request):
 	if not pid or not liked:
 		raise Http404("Must pass both a Product ID and a vote")
 	prod = Product.objects.get(pk=int(pid))
-	if prod.raters.filter(user=currentUserProfile).exists():
+	if prod.raters.filter(user=currentUserProfile).filter(creator=currentUserProfile).exists():
 		return HttpResponse(json.dumps({'error':'Cannot vote again for this product'}),
                         content_type="application/json")
 	else:
@@ -108,3 +108,58 @@ def vote(request):
 def display(request, vid):
     p = get_object_or_404(Product, pk=vid)
     return render(request, 'tindeers/display.html', {'p': p})
+
+
+def aggregate(request,pid):
+	# pid is a product id specified by the url
+	p = get_object_or_404(Product, pk=pid)
+
+	product_ratings = Rating.objects.filter(product=p)
+
+	data = {"gender":
+				{"yes": {"male":0, "female":0,"eunuch":0},
+				"no": {"male":0, "female":0,"eunuch":0}},
+			"location":{"yes": {},
+				"no": {}},
+			"age":{"yes": {},
+				"no": {}},
+			"education":{"yes": { "HS":0,"CO":0,"GS":0},
+					"no": { "HS":0,"CO":0,"GS":0}},
+			"relationship":{"yes": {},
+				"no": {}}
+			}
+
+	for r in product_ratings:
+		person = r.rater
+		if r.liked:
+			liked = "yes"
+		else:
+			liked = "no"
+
+		if person.gender not in ["male","female"]:
+			data["gender"][liked]["eunuch"] += 1
+		else:
+			data["gender"][liked][person.gender] += 1
+
+		if person.location in data["location"][liked]:
+			data["location"][liked][person.location] += 1
+		else:
+			data["location"][liked][person.location] = 1
+
+		if person.age in data["age"][liked]:
+			data["age"][liked][person.age] += 1
+		else:
+			data["age"][liked][person.age] = 1
+
+		if person.education in data["education"][liked]:
+			data["education"][liked][person.education] += 1
+		else:
+			data["education"][liked][person.education] = 1
+
+		if person.relationship_status in data["relationship"][liked]:
+			data["relationship"][liked][person.relationship_status] += 1
+		else:
+			data["relationship"][liked][person.relationship_status] = 1
+
+	return HttpResponse(json.dumps(data),
+                        content_type="application/json")

@@ -15,4 +15,5 @@ urlpatterns = patterns('',
     url(r'^product/(?P<vid>\d+)$', 'tindeers.views.display', name='product'),
     url(r'^$', 'tindeers.views.main_page', name='home'),
     url(r'^vote$', 'tindeers.views.vote', name='vote'),
+    url(r'^aggregate/(?P<pid>\d+)$', 'tindeers.views.aggregate', name='aggregate'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
