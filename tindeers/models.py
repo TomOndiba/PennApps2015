@@ -44,10 +44,22 @@ class UserProfile(models.Model):
         (WIDOWED, 'Widowed'),
     )
 
+    HS = 'HS'
+    CO = 'CO'
+    GS = 'GS'
+
+    EDUCATION_CHOICES = (
+        (HS, 'High School'),
+        (CO, 'College'),
+        (GS, 'Graduate School'),
+    )
+
     user = models.OneToOneField(User)
     age = models.IntegerField(null=True)
     location = models.CharField(max_length=255, blank=True)
     gender = models.CharField(max_length=10,
+                              default=EUNUCH)
+    education = models.CharField(max_length=20,
                               default=EUNUCH)
     relationship_status = models.CharField(max_length=100,
                                            default=UNKNOWN)

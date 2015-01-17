@@ -16,6 +16,16 @@ def _process_age(birthday):
 
     return delta.days / 365
 
+def process_edu(edu_array):
+	schools = {"High School": 0, "College": 1, "Graduate School": 2}
+	level = ["High School", "College", "Graduate School"]
+	best = 0
+	for school in edu_array:
+		ty = school["type"]
+		if ty in schools and schools[ty] > best:
+			best = schools[ty]
+	return level[best]
+
 
 def _process_school(schools):
     return 'college'
@@ -33,6 +43,7 @@ def get_facebook_info(sender, instance, created, **kwargs):
             print (data)
             UserProfile(age=_process_age(data['birthday']),
                         gender=data['gender'],
+                        education=process_edu(data['education']),
                         relationship_status=data['relationship_status'],
                         location=data['location']['name'].split(',')[1].strip(),
                         user=user).save()
