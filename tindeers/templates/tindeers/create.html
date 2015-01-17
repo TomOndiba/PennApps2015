@@ -1,0 +1,21 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="{% static "tindeers/bower_components/polymer/polymer.js" %}"></script>
+        <link rel="stylesheet" href="//assets.ziggeo.com/css/ziggeo-betajs-player.min.css" />
+		<script src="//assets.ziggeo.com/js/ziggeo-jquery-json2-betajs-player.min.js"></script>
+		<script>ZiggeoApi.token = "deed0f08202edade2593a0e7baf2c11f";
+		ZiggeoApi.Events.on("submitted", function (data) {
+			console.log(data);
+			// data.video.token == video id
+		});</script>
+    </head>
+    <body>
+        {% block 'content' %}
+        {% endblock %}
+        <ziggeo ziggeo-width=320
+        ziggeo-height=240>
+</ziggeo>
+    </body>
+</html>
