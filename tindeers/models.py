@@ -79,7 +79,7 @@ class Product(models.Model):
     creator = models.ForeignKey(UserProfile, related_name='creator')
     title = models.CharField(max_length=60)
     description = models.CharField(max_length=120)
-    video_link = models.CharField(max_length=25)
+    video_link = models.CharField(max_length=100)
     raters = models.ManyToManyField(UserProfile,
                                     through=Rating,
                                     related_name='raters')
