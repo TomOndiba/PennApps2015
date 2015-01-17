@@ -1,9 +1,10 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404
 from django.db.models.signals import post_save
 import json
-from tindeers.models import Product, UserProfile
+from tindeers.models import Product, UserProfile,Rating
 from social.apps.django_app.default.models import UserSocialAuth
 from django.utils.timezone import now
+from django.http import Http404
 import datetime
 import facebook
 
@@ -82,6 +83,24 @@ def create_api(request):
         response_data["product"] = p.pk
     return HttpResponse(json.dumps(response_data),
                         content_type="application/json")
+
+def vote(request):
+	pid = request.POST.get('pid', None)
+	liked = request.POST.get('liked', None)
+	print request.user.is_superuser
+	currentUserProfile = request.user.userprofile
+	if not pid or not liked:
+		raise Http404("Must pass both a Product ID and a vote")
+	prod = Product.objects.get(pk=int(pid))
+	if prod.raters.filter(user=currentUserProfile).exists():
+		return HttpResponse(json.dumps({'error':'Cannot vote again for this product'}),
+                        content_type="application/json")
+	else:
+		r = Rating(liked=bool(liked),rater=currentUserProfile,product =prod)
+		r.save()
+		return HttpResponse(json.dumps({'success':'Voted successfully for product'}),
+                        content_type="application/json")
+
 
 
 def display(request, vid):
