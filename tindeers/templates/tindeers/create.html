@@ -24,19 +24,23 @@
     </head>
     <body>
         {% block 'content' %}
-        <div>
-        <label>Title</label><input id="title" maxlength="60" type="text" placeholder="Title (60 char or less)">
-        </div>
-        <div>
-        <label>Description</label><input id="desc" maxlength="120" type="text" placeholder="Description (120 char or less)">
-        </div>
-        <div>
-        <p>Record a video to submit your product!</p>
-        </div>
-        <div class="hidden">
-            <ziggeo ziggeo-width=320
-                ziggeo-height=240>
-            </ziggeo>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">Title</span>
+                  <input type="text" id="title" maxlength="60" class="form-control" placeholder="Title (60 char or less)" aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">Description</span>
+                  <textarea id="desc" maxlength="120" type="text" placeholder="Description (120 char or less)" class="form-control"  aria-describedby="basic-addon1"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <p>Record a video to finish submitting your idea!</p>
+                <ziggeo ziggeo-width=320
+                    ziggeo-height=240>
+                </ziggeo>
+            </div>
         </div>
         {% endblock %}
     </body>
