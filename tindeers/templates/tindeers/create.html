@@ -9,7 +9,9 @@
 		<script>ZiggeoApi.token = "deed0f08202edade2593a0e7baf2c11f";
 		ZiggeoApi.Events.on("submitted", function (data) {
 			var video_id = data.video.token;
-            var post_data = {"video" : video_id, 'csrfmiddlewaretoken': '{{ csrf_token }}'};
+            var title = $("#title").val();
+            var desc = $("#desc").val();
+            var post_data = {"video" : video_id,"desc" : desc,"title" : title, 'csrfmiddlewaretoken': '{{ csrf_token }}'};
             console.log(post_data);
             var url = "/createApi"
             $.ajax({
@@ -22,9 +24,20 @@
     </head>
     <body>
         {% block 'content' %}
+        <div>
+        <label>Title</label><input id="title" maxlength="60" type="text" placeholder="Title (60 char or less)">
+        </div>
+        <div>
+        <label>Description</label><input id="desc" maxlength="120" type="text" placeholder="Description (120 char or less)">
+        </div>
+        <div>
+        <p>Record a video to submit your product!</p>
+        </div>
+        <div class="hidden">
+            <ziggeo ziggeo-width=320
+                ziggeo-height=240>
+            </ziggeo>
+        </div>
         {% endblock %}
-        <ziggeo ziggeo-width=320
-        ziggeo-height=240>
-        </ziggeo>
     </body>
 </html>

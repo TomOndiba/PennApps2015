@@ -5,12 +5,15 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="{% static "tindeers/bower_components/polymer/polymer.js" %}"></script>
         <link rel="stylesheet" href="//assets.ziggeo.com/css/ziggeo-betajs-player.min.css" />
+        <link rel="stylesheet" href="/static/style.css" />
 		<script src="//assets.ziggeo.com/js/ziggeo-json2-betajs-player.min.js"></script>
 		<script>ZiggeoApi.token = "deed0f08202edade2593a0e7baf2c11f";</script>
     </head>
     <body>
         {% block 'content' %}
         {% endblock %}
-        <ziggeo ziggeo-video={{video_id}}></ziggeo>    
+        <h1>{{p.title}}</h1>
+        <p>{{p.description}}</p>
+        <ziggeo ziggeo-video={{p.video_link}}></ziggeo>    
     </body>
 </html>

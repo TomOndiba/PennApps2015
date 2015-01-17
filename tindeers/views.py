@@ -16,14 +16,14 @@ def create(request):
 
 def create_api(request):
 	video = request.POST.get('video',None)
-	if not video:
-		video = request.GET.get('video',None)
+	description = request.POST.get('desc',None)
+	title = request.POST.get('title',None)
 	response_data = {}
-	if video:
+	if video and title and description:
 		p = Product()
 		p.video_link = video
-		p.description = "abc"
-		p.title = "TITLE"
+		p.description = description
+		p.title = title
 		p.creator_id = 1
 		p.save()
 		response_data["product"] = p.id
@@ -31,4 +31,4 @@ def create_api(request):
 
 def display(request,vid):
 	p = Product.objects.get(pk=vid)
-	return render(request, 'tindeers/display.html', {'video_id':p.video_link})
+	return render(request, 'tindeers/display.html', {'p':p})
