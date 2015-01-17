@@ -2,14 +2,65 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="{% static "tindeers/bower_components/polymer/polymer.js" %}"></script>       
-    </head>
-    <body>
-        {% if user %}
-            {{ user }}
-        {% endif %}
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <meta name="description" content="">
+	    <meta name="author" content="">
+	    <link rel="icon" href="http://www.getbootstrap.com/favicon.ico">
+	    <link href="//www.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+	    <link href="//www.getbootstrap.com/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+	    <link href="{% static "tindeers/css/BStheme.css"%}" rel="stylesheet">
+	    <script src="//www.getbootstrap.com/assets/js/ie-emulation-modes-warning.js"></script>
 
-        {% block 'content' %}
-        {% endblock %}
+	    <title>{% block 'title' %}Tindeers{% endblock %}</title>
+    </head>
+    <body role="document">
+    	 <!-- Fixed navbar -->
+	    <nav class="navbar navbar-inverse navbar-fixed-top">
+	      <div class="container">
+	        <div class="navbar-header">
+	          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="#">Oh Deer...</a>
+	        </div>
+	        <div id="navbar" class="navbar-collapse collapse">
+	          <ul class="nav navbar-nav">
+	            <li class="active"><a href="#">Home</a></li>
+	            <li><a href="#about">About</a></li>
+	            <li><a href="#explore">Explore</a></li>
+	            {% if user.is_authenticated %}
+	            <li class="dropdown">
+	              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My'Deas <span class="caret"></span></a>
+	              <ul class="dropdown-menu" role="menu">
+	                <li><a href="#">New</a></li>
+
+	                <li><a href="#">Manage Ideas</a></li>
+	                <li class="divider"></li>
+	                <li class="dropdown-header">My'Deas</li>
+	                {% for idea in user.userprofile.my_products.all %}
+	                	<li><a href="{% url 'feedback' product_id=idea.pk %}">{{ idea.title }}</a></li>
+	                {% endfor %}
+	              </ul>
+	            </li>
+	            {% endif %}
+	          </ul>
+	        </div><!--/.nav-collapse -->
+	      </div>
+	    </nav>
+	    <div class="container theme-showcase" role="main">
+	    	{% block 'content' %}
+		    {% endblock %}
+	    </div> <!-- /container -->
+	    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	    <script src="//www.getbootstrap.com/dist/js/bootstrap.min.js"></script>
+	    <script src="//www.getbootstrap.com/assets/js/docs.min.js"></script>
+	    <script src="//www.getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+	    {% block 'scripts' %}
+	    {% endblock %}
     </body>
 </html>

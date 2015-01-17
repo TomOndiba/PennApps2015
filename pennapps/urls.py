@@ -14,4 +14,7 @@ urlpatterns = patterns('',
     url(r'^createApi$', 'tindeers.views.create_api', name='create_api'),
     url(r'^product/(?P<vid>\d+)$', 'tindeers.views.display', name='product'),
     url(r'^$', 'tindeers.views.main_page', name='home'),
+    url(r'^manage/(?P<product_id>\d+)$', 'tindeers.views.feedback', name='feedback'),
+    url(r'^manage$', 'tindeers.views.manage_all', name='manage_all'),
+
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

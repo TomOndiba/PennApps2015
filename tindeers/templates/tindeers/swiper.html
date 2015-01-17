@@ -1,0 +1,56 @@
+{% extends 'tindeers/base.html' %}
+{% block 'content' %}
+
+      <div class="row">
+        <div class="col-sm-7">
+          <div class="jumbotron">
+            <h1>{{product.title}}</h1>
+            <p>{{product.description}}</p>
+          </div>
+        </div>
+
+        <div class="col-sm-5">
+          <div>video?</div>
+          <br/>
+          {% if product.product_link %}
+            <div class="alert alert-info" role="alert">
+              <strong>Learn More:</strong> visit our site <a href="{{product.product_link}}">here</a>.
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <div>
+          <button type="button" id="yaybtn" class="btn btn-lg btn-success">Yay</button>
+          <button type="button" id="naybtn" class="btn btn-lg btn-danger">Nay</button>
+          <button type="button" id="nextbtn" class="btn btn-lg btn-info" style="float: right;">Next > </button>
+          <br/>
+      </div>
+      <br/>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="progress">
+            <div class="progress-bar progress-bar-success" style="width: 70%"><span class="sr-only">Yay - 70%</span></div>
+            <div class="progress-bar progress-bar-danger" style="width: 30%"><span class='sr-only'>Nay - 30%</span></div>
+          </div>
+          <div class="well">
+            <p>enter your thoughts, if any, here</p>
+          </div>
+
+            <button type="button" class="btn btn-sm btn-warning">Submit</button>
+        </div>
+        <div class="col-sm-8">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">Comments</h3>
+            </div>
+            <div class="panel-body">
+              Panel content
+            </div>
+          </div>
+        </div>
+        
+{% endblock %}
+
+{% block 'scripts' %}
+
+{% endblock %}

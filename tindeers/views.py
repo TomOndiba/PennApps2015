@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404
 from django.db.models.signals import post_save
+from django.contrib.auth.decorators import login_required
 import json
 from tindeers.models import Product, UserProfile
 from social.apps.django_app.default.models import UserSocialAuth
@@ -56,18 +57,30 @@ post_save.connect(get_facebook_info,
                   dispatch_uid='create_user_profile')
 
 
-# No server side Ziggeo should be need at the time
-# Can get the video merely with the id which is gotten
-# via the script client side
-
-
 def main_page(request):
-    return render(request, 'tindeers/base.html', {})
+    return render(request, 'tindeers/ideadash.html', {'title': 'Nikhil\'s App'})
 
 
-def create(request):
+@login_required
+def create(request, product_id):
     return render(request, 'tindeers/create.html', {})
 
+@login_required
+def feedback(request, product_id):
+    p = get_object_or_404(Product, pk=product_id)
+    if p.creator.user.pk != request.user.pk:
+        return render(request, 'tindeers/not_yours.html', {})
+
+    return render(request, 'tindeers/ideadash.html', {'product': p})
+
+@login_required
+def manage_all(request):
+    all_ideas = request.user.userprofile.my_products.all()
+
+    for idea in all_ideas:
+        idea.positive = 10 # idea.raters.filter('') / idea.raters.count()
+
+    return render(request, 'tindeers/ideamanage.html', {'ideas': all_ideas})
 
 def create_api(request):
     video = request.POST.get('video', None)

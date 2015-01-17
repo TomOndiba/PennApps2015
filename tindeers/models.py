@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -85,13 +86,13 @@ class Product(models.Model):
     Could be expanded to have images and other things
     """
 
-    creator = models.ForeignKey(UserProfile, related_name='creator')
+    creator = models.ForeignKey(UserProfile, related_name='my_products')
     title = models.CharField(max_length=60)
     description = models.CharField(max_length=120)
     video_link = models.CharField(max_length=100)
     raters = models.ManyToManyField(UserProfile,
                                     through=Rating,
-                                    related_name='raters')
+                                    related_name='my_rated_products')
 
 
 class Comment(models.Model):

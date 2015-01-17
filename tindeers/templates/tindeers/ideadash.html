@@ -1,0 +1,145 @@
+{% extends 'tindeers/base.html' %}
+
+{% block 'content' %}
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+
+      <div class="page-header">
+        <h1>My Feedback</h1>
+        <h2>{{ product.title }}</h2>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Response by Gender</h3>
+            </div>
+            <div class="panel-body">
+              Panel content
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Response by Age</h3>
+            </div>
+            <div class="panel-body">
+              Panel content
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Response by Location</h3>
+            </div>
+            <div class="panel-body">
+              Panel content
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Response by Education</h3>
+            </div>
+            <div class="panel-body">
+              Panel content
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Response by Relationship</h3>
+            </div>
+            <div class="panel-body">
+              Panel content
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Panel title</h3>
+            </div>
+            <div class="panel-body">
+              Panel content
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-header">
+        <h1>Top Reviews</h1>
+      </div>
+      <div class="well">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed diam eget risus varius blandit sit amet non magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Cras mattis consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur.</p>
+      </div>
+      <div class="well">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed diam eget risus varius blandit sit amet non magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Cras mattis consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur.</p>
+      </div>
+      <div class="page-header">
+        <h1>All Feedback
+          <div class="btn-group" role="group" aria-label="...">
+            <button type="button" class="btn btn-default active">Liked</button>
+            <button type="button" class="btn btn-default">Disliked</button>
+          </div>
+        </h1>
+      </div>
+
+        <div>
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>User(?)</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Location</th>
+                <th>Education</th>
+                <th>Relationship</th>
+                <th>Comments</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>User1</td>
+                <td>23</td>
+                <td>Male</td>
+                <td>PA</td>
+                <td>High School</td>
+                <td>Single</td>
+                <td>N/A</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>User2</td>
+                <td>27</td>
+                <td>Male</td>
+                <td>CA</td>
+                <td>College</td>
+                <td>In a Relationship</td>
+                <td>i really like the idea, would be interested in how UI will work on mobile, though; doesnt seem fesible as it is</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>User3</td>
+                <td>32</td>
+                <td>Female</td>
+                <td>ME</td>
+                <td>College</td>
+                <td>Engaged</td>
+                <td>cool enough; would try it</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+{% endblock %}
