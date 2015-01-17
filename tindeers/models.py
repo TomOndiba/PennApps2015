@@ -11,8 +11,8 @@ class UserProfile(models.Model):
     FEMALE = 'F'
     EUNUCH = 'E'
     GENDER_CHOICES = (
-        (MALE, 'Male'),
-        (FEMALE, 'Female'),
+        (MALE, 'male'),
+        (FEMALE, 'female'),
         (EUNUCH, 'Eunuch'),
     )
 
@@ -47,15 +47,12 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     age = models.IntegerField(null=True)
     location = models.CharField(max_length=255, blank=True)
-    gender = models.CharField(max_length=1,
-                              choices=GENDER_CHOICES,
+    gender = models.CharField(max_length=10,
                               default=EUNUCH)
-    email = models.EmailField(blank=True)
-    relationship_status = models.CharField(max_length=2,
-                                           choices=RELATIONSHIP_CHOICES,
+    relationship_status = models.CharField(max_length=100,
                                            default=UNKNOWN)
 
-    comments = models.ForeignKey('Comment')
+    comments = models.ForeignKey('Comment', blank=True, null=True)
 
     def __unicode__(self):
         return self.user.get_full_name()

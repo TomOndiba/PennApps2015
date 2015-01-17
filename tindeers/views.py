@@ -1,6 +1,48 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404
+from django.db.models.signals import post_save
 import json
-from tindeers.models import Product
+from tindeers.models import Product, UserProfile
+from social.apps.django_app.default.models import UserSocialAuth
+from django.utils.timezone import now
+import datetime
+import facebook
+
+
+def _process_age(birthday):
+    birthdate = datetime.datetime.strptime(birthday, '%m/%d/%Y').date()
+    current_date = now().date()
+
+    delta = current_date - birthdate
+
+    return delta.days / 365
+
+
+def _process_school(schools):
+    return 'college'
+
+
+def get_facebook_info(sender, instance, created, **kwargs):
+    print(instance.extra_data)
+    user = instance.user
+    try:
+        user.userprofile
+    except UserProfile.DoesNotExist:
+        try:
+            graph = facebook.GraphAPI(instance.extra_data['access_token'])
+            data = graph.get_object("me")
+            print (data)
+            UserProfile(age=_process_age(data['birthday']),
+                        gender=data['gender'],
+                        relationship_status=data['relationship_status'],
+                        location=data['location']['name'].split(',')[1].strip(),
+                        user=user).save()
+        except KeyError:
+            print('well, balls')
+
+
+post_save.connect(get_facebook_info,
+                  sender=UserSocialAuth,
+                  dispatch_uid='create_user_profile')
 
 
 # No server side Ziggeo should be need at the time
@@ -22,13 +64,11 @@ def create_api(request):
     title = request.POST.get('title', None)
     response_data = {}
     if video and title and description:
-        p = Product()
-        p.video_link = video
-        p.description = description
-        p.title = title
-        p.creator_id = 1
-        p.save()
-        response_data["product"] = p.id
+        p = Product.objects.create(video_link=video,
+                                   description=description,
+                                   title=title,
+                                   creator_id=request.user.pk)
+        response_data["product"] = p.pk
     return HttpResponse(json.dumps(response_data),
                         content_type="application/json")
 

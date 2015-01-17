@@ -5,6 +5,10 @@
         <script src="{% static "tindeers/bower_components/polymer/polymer.js" %}"></script>       
     </head>
     <body>
+        {% if user %}
+            {{ user }}
+        {% endif %}
+
         {% block 'content' %}
         {% endblock %}
     </body>
