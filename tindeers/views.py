@@ -74,11 +74,13 @@ def create_api(request):
     video = request.POST.get('video', None)
     description = request.POST.get('desc', None)
     title = request.POST.get('title', None)
+    url = request.POST.get('url', None)
     response_data = {}
     if video and title and description:
         p = Product.objects.create(video_link=video,
                                    description=description,
                                    title=title,
+                                   product_link=url,
                                    creator_id=request.user.pk)
         response_data["product"] = p.pk
     return HttpResponse(json.dumps(response_data),
