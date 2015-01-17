@@ -11,7 +11,8 @@
 			var video_id = data.video.token;
             var title = $("#title").val();
             var desc = $("#desc").val();
-            var post_data = {"video" : video_id,"desc" : desc,"title" : title, 'csrfmiddlewaretoken': '{{ csrf_token }}'};
+             var url = $("#url").val();
+            var post_data = {"video" : video_id,"desc" : desc,"title" : title, 'url':url, 'csrfmiddlewaretoken': '{{ csrf_token }}'};
             console.log(post_data);
             var url = "/createApi"
             $.ajax({
@@ -29,6 +30,9 @@
         </div>
         <div>
         <label>Description</label><input id="desc" maxlength="120" type="text" placeholder="Description (120 char or less)">
+        </div>
+        <div>
+        <label>Product URL</label><input id="url" maxlength="200" type="text" placeholder="A product URL">
         </div>
         <div>
         <p>Record a video to submit your product!</p>
