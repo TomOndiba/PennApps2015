@@ -10,5 +10,7 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^create$', 'tindeers.views.create', name='create'),
+    url(r'^createApi$', 'tindeers.views.create_api', name='create_api'),
+    url(r'^product/(?P<vid>\d+)$', 'tindeers.views.display', name='product'),
     url(r'^$', 'tindeers.views.main_page', name='home'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
