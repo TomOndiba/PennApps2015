@@ -1,6 +1,7 @@
 htmlcov/
 secret.py
 *.sqlite3
+/static/
 
 .idea/
 .DS_Store
