@@ -29,9 +29,6 @@ def process_edu(edu_array):
 	return level[best]
 
 
-def _process_school(schools):
-    return 'college'
-
 
 def get_facebook_info(sender, instance, created, **kwargs):
     print(instance.extra_data)
@@ -83,6 +80,7 @@ def manage_all(request):
 
     return render(request, 'tindeers/ideamanage.html', {'ideas': all_ideas})
 
+@login_required
 def create_api(request):
     video = request.POST.get('video', None)
     description = request.POST.get('desc', None)
@@ -99,6 +97,7 @@ def create_api(request):
     return HttpResponse(json.dumps(response_data),
                         content_type="application/json")
 
+@login_required
 def vote(request):
 	pid = request.POST.get('pid', None)
 	liked = request.POST.get('liked', None)
@@ -117,12 +116,12 @@ def vote(request):
                         content_type="application/json")
 
 
-
+@login_required
 def display(request, vid):
     p = get_object_or_404(Product, pk=vid)
     return render(request, 'tindeers/display.html', {'p': p})
 
-
+@login_required
 def aggregate(request,pid):
 	# pid is a product id specified by the url
 	p = get_object_or_404(Product, pk=pid)
