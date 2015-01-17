@@ -13,7 +13,7 @@ class UserProfile(models.Model):
     GENDER_CHOICES = (
         (MALE, 'male'),
         (FEMALE, 'female'),
-        (EUNUCH, 'Eunuch'),
+        (EUNUCH, 'eunuch'),
     )
 
     UNKNOWN = 'UN'
@@ -44,15 +44,7 @@ class UserProfile(models.Model):
         (WIDOWED, 'Widowed'),
     )
 
-    HS = 'HS'
-    CO = 'CO'
-    GS = 'GS'
 
-    EDUCATION_CHOICES = (
-        (HS, 'High School'),
-        (CO, 'College'),
-        (GS, 'Graduate School'),
-    )
 
     user = models.OneToOneField(User)
     age = models.IntegerField(null=True)
@@ -60,7 +52,7 @@ class UserProfile(models.Model):
     gender = models.CharField(max_length=10,
                               default=EUNUCH)
     education = models.CharField(max_length=20,
-                              default=EUNUCH)
+                              default='High School')
     relationship_status = models.CharField(max_length=100,
                                            default=UNKNOWN)
 
