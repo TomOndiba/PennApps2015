@@ -8,11 +8,11 @@
 	    <meta name="description" content="">
 	    <meta name="author" content="">
 	    <link rel="icon" href="http://www.getbootstrap.com/favicon.ico">
-	    <link href="//www.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
-	    <link href="//www.getbootstrap.com/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+	    <link href="{% static "tindeers/css/bootstrap.min.css"%}" rel="stylesheet">
+	    <link href="{% static "tindeers/css/bootstrap-theme.min.css"%}" rel="stylesheet">
 	    <link href="{% static "tindeers/css/BStheme.css"%}" rel="stylesheet">
 	    <script src="//www.getbootstrap.com/assets/js/ie-emulation-modes-warning.js"></script>
-
+	    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:600,400' rel='stylesheet' type='text/css'>
 	    <title>{% block 'title' %}Tindeers{% endblock %}</title>
     </head>
     <body role="document">
@@ -57,7 +57,7 @@
 		    {% endblock %}
 	    </div> <!-- /container -->
 	    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	    <script src="//www.getbootstrap.com/dist/js/bootstrap.min.js"></script>
+	    <script src="{% static "tindeers/css/bootstrap.min.js"%}"></script>
 	    <script src="//www.getbootstrap.com/assets/js/docs.min.js"></script>
 	    <script src="//www.getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
 	    {% block 'scripts' %}
