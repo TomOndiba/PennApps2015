@@ -47,9 +47,11 @@
                             {% endfor %}
                         </ul>
                         </li>
-                        <li><a href="{% url 'logout_view' %}" class="btn btn-lg btn-primary">Log Out</a></li>
+                        <style type="text/css">a.label-primary:hover{background-color:#607f34 !important;}</style>
+                        <li><a href="{% url 'logout_view' %}" class="label label-primary">Log Out</a></li>
                         {% else %}
-                        <li><a href="/login/facebook" class="btn btn-lg btn-primary">Facebook Login</a></li>
+                         <style type="text/css">a.label-primary:hover{background-color:#607f34 !important;}</style>
+                        <li><a href="/login/facebook" class="label label-primary">Facebook Login</a></li>
                         {% endif %}
 
                     </ul>
