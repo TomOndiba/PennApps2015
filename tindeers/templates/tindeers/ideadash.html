@@ -240,17 +240,17 @@
 
       function generateAgeData(ageData) {
         var AgeRanges = {"-25":0, "26-35":0,"36-50":0,"51-65":0,"65+":0};
-        for (var key in data.age.yes) {
-          if (data.age[key] < 25) {
-            AgeRanges["-25"] += 1;
-          } else if (parseInt(key) > 25 && parseInt(key) <= 35) {
-            AgeRanges["26-35"] += 1;
-          } else if (parseInt(key) > 35 && parseInt(key) <= 50) {
-            AgeRanges["36-50"] += 1;
-          } else if (parseInt(key) > 50 && parseInt(key) <= 65) {
-            AgeRanges["51-65"] += 1;
+         for (var key in ageData) {
+          if (parseInt(key) <= 25) {
+            AgeRanges["-25"] += ageData[key];
+          } else if (parseInt(key) <= 35) {
+            AgeRanges["26-35"] += ageData[key];
+          } else if (parseInt(key) <= 50) {
+            AgeRanges["36-50"] += ageData[key];
+          } else if (parseInt(key) <= 65) {
+            AgeRanges["51-65"] += ageData[key];
           } else {
-            AgeRanges["65+"] += 1;
+            AgeRanges["65+"] += ageData[key];
           }
         }
         return [
