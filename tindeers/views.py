@@ -123,7 +123,7 @@ def create_api(request):
     video = request.POST.get('video', None)
     description = request.POST.get('desc', None)
     title = request.POST.get('title', None)
-    url = request.POST.get('url', None)
+    url = request.POST.get('url', " ")
     response_data = {}
     if video and title and description:
         p = Product.objects.create(video_link=video,

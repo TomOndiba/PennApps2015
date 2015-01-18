@@ -33,7 +33,6 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class="{{ home }}"><a href="/">Home</a></li>
-                        <li><a href="#about">About</a></li>
                         <li class="{{ explore }}"><a href="{% url 'explore' %}">Explore</a></li>
                         {% if user.is_authenticated %}
                         <li class="dropdown {{ mydea }}">
