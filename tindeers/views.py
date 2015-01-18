@@ -1,6 +1,7 @@
-from django.shortcuts import render, HttpResponse, get_object_or_404
+from django.shortcuts import render, redirect,HttpResponse, get_object_or_404
 from django.db.models.signals import post_save
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 import json
 from tindeers.models import Product, UserProfile,Rating,Comment
 from social.apps.django_app.default.models import UserSocialAuth
@@ -57,6 +58,12 @@ post_save.connect(get_facebook_info,
 
 def main_page(request):
     return render(request, 'tindeers/ideadash.html', {'home': 'active'})
+
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('/')
 
 
 @login_required
