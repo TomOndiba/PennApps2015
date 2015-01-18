@@ -47,8 +47,11 @@
 	                {% endfor %}
 	              </ul>
 	            </li>
-	            <li><a href="#" class="btn btn-lg btn-primary">Primary</a></li>
+	            <li><a href="{% url 'logout_view' %}" class="btn btn-lg btn-primary">Log Out</a></li>
+	            {% else %}
+	            <li><a href="/login/facebook" class="btn btn-lg btn-primary">Facebook Login</a></li>
 	            {% endif %}
+
 	          </ul>
 	        </div><!--/.nav-collapse -->
 	      </div>
