@@ -1,50 +1,45 @@
 {% extends 'tindeers/base.html' %}
 {% load staticfiles %}
-    {% block 'head' %}
-        <link rel="stylesheet" href="//assets.ziggeo.com/css/ziggeo-betajs-player.min.css" />
-    {% endblock %}
+{% block 'head' %}
+    <link rel="stylesheet" href="//assets.ziggeo.com/css/ziggeo-betajs-player.min.css" />
+{% endblock %}
 
-    {% block 'content' %}
-        <div>
-        <label>Title</label><input id="title" maxlength="60" type="text" placeholder="Title (60 char or less)">
+{% block 'scripts' %}
+    <script src="//assets.ziggeo.com/js/ziggeo-json2-betajs-player.min.js"></script>
+    <script>ZiggeoApi.token = "deed0f08202edade2593a0e7baf2c11f";
+    ZiggeoApi.Events.on("submitted", function (data) {
+        var video_id = data.video.token;
+        var title = $("#title").val();
+        var desc = $("#desc").val();
+        var post_data = {"video" : video_id,"desc" : desc,"title" : title, 'csrfmiddlewaretoken': '{{ csrf_token }}'};
+        console.log(post_data);
+        var url = "/createApi"
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: post_data,
+          success: function(res){console.log(res)}
+        });
+    });</script>
+{% endblock %}
+
+{% block 'content' %}
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon1">Title</span>
+              <input type="text" id="title" maxlength="60" class="form-control" placeholder="Title (60 char or less)" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon1">Description</span>
+              <textarea id="desc" maxlength="120" type="text" placeholder="Description (120 char or less)" class="form-control"  aria-describedby="basic-addon1"></textarea>
+            </div>
         </div>
-        <div>
-        <label>Description</label><input id="desc" maxlength="120" type="text" placeholder="Description (120 char or less)">
-        </div>
-        <div>
-        <label>Product URL</label><input id="url" maxlength="200" type="text" placeholder="A product URL">
-        </div>
-        <div>
-        <p>Record a video to submit your product!</p>
-        </div>
+        <div class="col-sm-6">
+            <p>Record a video to finish submitting your idea!</p>
             <ziggeo ziggeo-width=320
                 ziggeo-height=240>
             </ziggeo>
-    {% endblock %}
-
-    {% block 'scripts' %}
-		<script src="//assets.ziggeo.com/js/ziggeo-json2-betajs-player.min.js"></script>
-		<script>
-            ZiggeoApi.token = "deed0f08202edade2593a0e7baf2c11f";
-            ZiggeoApi.Events.on("submitted", function (data) {
-                var url = "/createApi"
-                    video_id = data.video.token;
-                    title = $("#title").val(),
-                    desc = $("#desc").val(),
-                    url = $("#url").val(),
-                    post_data = {"video": video_id,
-                                "desc": desc,
-                                "title": title, 
-                                'url':url,
-                                'csrfmiddlewaretoken': '{{ csrf_token }}'
-                             };
-                console.log(post_data);
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: post_data,
-                    success: function(res){console.log(res)}
-                });
-	    	});
-        </script>
-    {% endblock %}
+        </div>
+    </div>
+{% endblock %}

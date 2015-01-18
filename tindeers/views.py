@@ -109,14 +109,14 @@ def create_api(request):
 
 @login_required
 def vote(request):
-	pid = request.POST.get('pid', None)
-	liked = request.POST.get('liked', None)
-	currentUserProfile = request.user.userprofile
-	if not pid or not liked:
-		raise Http404("Must pass both a Product ID and a vote")
-	prod = Product.objects.get(pk=int(pid))
-	if prod.raters.filter(user=currentUserProfile).filter(creator=currentUserProfile).exists():
-		return HttpResponse(json.dumps({'error':'Cannot vote again for this product'}),
+    pid = request.POST.get('pid', None)
+    liked = request.POST.get('liked', None)
+    currentUserProfile = request.user.userprofile
+    if not pid or not liked:
+        raise Http404("Must pass both a Product ID and a vote")
+    prod = Product.objects.get(pk=int(pid))
+    if prod.raters.filter(user=currentUserProfile).filter(creator=currentUserProfile).exists():
+        return HttpResponse(json.dumps({'error':'Cannot vote again for this product'}),
                             content_type="application/json")
     else:
         r = Rating(liked=bool(liked),rater=currentUserProfile,product =prod)
@@ -189,19 +189,19 @@ def aggregate(request,pid):
 
 @login_required
 def comment(request,pid):
-	#pid is the product id which is being commented on
-	p = get_object_or_404(Product, pk=pid)
-	body = request.POST.get('msg', None)
-	if not body:
-		raise Http404("Must pass a body of the comment")
-	currentUserProfile = request.user.userprofile
-	comment_time =
-	com = Comment.objects.create(product=p,
+    #pid is the product id which is being commented on
+    p = get_object_or_404(Product, pk=pid)
+    body = request.POST.get('msg', None)
+    if not body:
+        raise Http404("Must pass a body of the comment")
+    currentUserProfile = request.user.userprofile
+    comment_time = now()
+    com = Comment.objects.create(product=p,
                                    text=body,
                                    comment_time=datetime.datetime.now(),
                                    author=currentUserProfile)
-	com.save()
-	response_data = {}
-	response_data["comment"] = com.pk
+    com.save()
+    response_data = {}
+    response_data["comment"] = com.pk
     return HttpResponse(json.dumps(response_data),
                         content_type="application/json")
