@@ -76,6 +76,12 @@ def explore(request):
                                                     'product': product})
 
 
+def landing(request):
+    if request.user.is_authenticated():
+        return redirect('/home')
+    return render(request, 'tindeers/landing.html',{})
+
+
 @login_required
 def create(request):
     return render(request, 'tindeers/create.html', {'mydea': 'active'})
