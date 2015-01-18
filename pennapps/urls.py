@@ -19,4 +19,5 @@ urlpatterns = patterns('',
     url(r'^vote$', 'tindeers.views.vote', name='vote'),
     url(r'^aggregate/(?P<pid>\d+)$', 'tindeers.views.aggregate', name='aggregate'),
     url(r'^comment/(?P<pid>\d+)$', 'tindeers.views.comment', name='comment'),
+    url(r'^explore$', 'tindeers.views.explore', name='explore'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

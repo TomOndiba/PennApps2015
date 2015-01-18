@@ -1,30 +1,10 @@
+{% extends 'tindeers/base.html' %}
 {% load staticfiles %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="{% static "tindeers/bower_components/polymer/polymer.js" %}"></script>
+    {% block 'head' %}
         <link rel="stylesheet" href="//assets.ziggeo.com/css/ziggeo-betajs-player.min.css" />
-		<script src="//assets.ziggeo.com/js/ziggeo-json2-betajs-player.min.js"></script>
-		<script>ZiggeoApi.token = "deed0f08202edade2593a0e7baf2c11f";
-		ZiggeoApi.Events.on("submitted", function (data) {
-			var video_id = data.video.token;
-            var title = $("#title").val();
-            var desc = $("#desc").val();
-             var url = $("#url").val();
-            var post_data = {"video" : video_id,"desc" : desc,"title" : title, 'url':url, 'csrfmiddlewaretoken': '{{ csrf_token }}'};
-            console.log(post_data);
-            var url = "/createApi"
-            $.ajax({
-              type: "POST",
-              url: url,
-              data: post_data,
-              success: function(res){console.log(res)}
-            });
-		});</script>
-    </head>
-    <body>
-        {% block 'content' %}
+    {% endblock %}
+
+    {% block 'content' %}
         <div>
         <label>Title</label><input id="title" maxlength="60" type="text" placeholder="Title (60 char or less)">
         </div>
@@ -37,11 +17,34 @@
         <div>
         <p>Record a video to submit your product!</p>
         </div>
-        <div class="hidden">
             <ziggeo ziggeo-width=320
                 ziggeo-height=240>
             </ziggeo>
-        </div>
-        {% endblock %}
-    </body>
-</html>
+    {% endblock %}
+
+    {% block 'scripts' %}
+		<script src="//assets.ziggeo.com/js/ziggeo-json2-betajs-player.min.js"></script>
+		<script>
+            ZiggeoApi.token = "deed0f08202edade2593a0e7baf2c11f";
+            ZiggeoApi.Events.on("submitted", function (data) {
+                var url = "/createApi"
+                    video_id = data.video.token;
+                    title = $("#title").val(),
+                    desc = $("#desc").val(),
+                    url = $("#url").val(),
+                    post_data = {"video": video_id,
+                                "desc": desc,
+                                "title": title, 
+                                'url':url,
+                                'csrfmiddlewaretoken': '{{ csrf_token }}'
+                             };
+                console.log(post_data);
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: post_data,
+                    success: function(res){console.log(res)}
+                });
+	    	});
+        </script>
+    {% endblock %}

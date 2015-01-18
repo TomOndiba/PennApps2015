@@ -14,6 +14,7 @@
 	    <script src="//www.getbootstrap.com/assets/js/ie-emulation-modes-warning.js"></script>
 
 	    <title>{% block 'title' %}Tindeers{% endblock %}</title>
+        {% block 'head' %}{% endblock %}
     </head>
     <body role="document">
     	 <!-- Fixed navbar -->
@@ -30,16 +31,15 @@
 	        </div>
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav">
-	            <li class="active"><a href="#">Home</a></li>
+                  <li class="{{ home }}"><a href="/">Home</a></li>
 	            <li><a href="#about">About</a></li>
-	            <li><a href="#explore">Explore</a></li>
+                <li class="{{ explore }}"><a href="{% url 'explore' %}">Explore</a></li>
 	            {% if user.is_authenticated %}
-	            <li class="dropdown">
+                <li class="dropdown {{ mydea }}">
 	              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My'Deas <span class="caret"></span></a>
 	              <ul class="dropdown-menu" role="menu">
-	                <li><a href="#">New</a></li>
-
-	                <li><a href="#">Manage Ideas</a></li>
+                    <li><a href="{% url 'create' %}">New</a></li>
+                    <li><a href="{% url 'manage_all' %}">Manage Ideas</a></li>
 	                <li class="divider"></li>
 	                <li class="dropdown-header">My'Deas</li>
 	                {% for idea in user.userprofile.my_products.all %}

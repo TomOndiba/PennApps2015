@@ -19,14 +19,14 @@ def _process_age(birthday):
     return delta.days / 365
 
 def process_edu(edu_array):
-	schools = {"High School": 0, "College": 1, "Graduate School": 2}
-	level = ["High School", "College", "Graduate School"]
-	best = 0
-	for school in edu_array:
-		ty = school["type"]
-		if ty in schools and schools[ty] > best:
-			best = schools[ty]
-	return level[best]
+    schools = {"High School": 0, "College": 1, "Graduate School": 2}
+    level = ["High School", "College", "Graduate School"]
+    best = 0
+    for school in edu_array:
+        ty = school["type"]
+        if ty in schools and schools[ty] > best:
+            best = schools[ty]
+    return level[best]
 
 
 
@@ -56,12 +56,18 @@ post_save.connect(get_facebook_info,
 
 
 def main_page(request):
-    return render(request, 'tindeers/ideadash.html', {'title': 'Nikhil\'s App'})
+    return render(request, 'tindeers/ideadash.html', {'home': 'active'})
 
 
 @login_required
-def create(request, product_id):
-    return render(request, 'tindeers/create.html', {})
+def explore(request):
+    return render(request, 'tindeers/swiper.html', {'explore': 'active'})
+
+
+@login_required
+def create(request):
+    return render(request, 'tindeers/create.html', {'mydea': 'active'})
+
 
 @login_required
 def feedback(request, product_id):
@@ -69,16 +75,20 @@ def feedback(request, product_id):
     if p.creator.user.pk != request.user.pk:
         return render(request, 'tindeers/not_yours.html', {})
 
-    return render(request, 'tindeers/ideadash.html', {'product': p})
+    return render(request, 'tindeers/ideadash.html', {'product': p,
+                                                      'mydea': 'active'})
+
 
 @login_required
 def manage_all(request):
     all_ideas = request.user.userprofile.my_products.all()
 
     for idea in all_ideas:
-        idea.positive = 10 # idea.raters.filter('') / idea.raters.count()
+        idea.positive = 10  # idea.raters.filter('') / idea.raters.count()
 
-    return render(request, 'tindeers/ideamanage.html', {'ideas': all_ideas})
+    return render(request, 'tindeers/ideamanage.html', {'ideas': all_ideas,
+                                                        'mydea': 'active'})
+
 
 @login_required
 def create_api(request):
@@ -107,11 +117,11 @@ def vote(request):
 	prod = Product.objects.get(pk=int(pid))
 	if prod.raters.filter(user=currentUserProfile).filter(creator=currentUserProfile).exists():
 		return HttpResponse(json.dumps({'error':'Cannot vote again for this product'}),
-                        content_type="application/json")
-	else:
-		r = Rating(liked=bool(liked),rater=currentUserProfile,product =prod)
-		r.save()
-		return HttpResponse(json.dumps({'success':'Voted successfully for product'}),
+                            content_type="application/json")
+    else:
+        r = Rating(liked=bool(liked),rater=currentUserProfile,product =prod)
+        r.save()
+        return HttpResponse(json.dumps({'success':'Voted successfully for product'}),
                         content_type="application/json")
 
 
@@ -122,57 +132,57 @@ def display(request, vid):
 
 @login_required
 def aggregate(request,pid):
-	# pid is a product id specified by the url
-	p = get_object_or_404(Product, pk=pid)
+    # pid is a product id specified by the url
+    p = get_object_or_404(Product, pk=pid)
 
-	product_ratings = Rating.objects.filter(product=p)
+    product_ratings = Rating.objects.filter(product=p)
 
-	data = {"gender":
-				{"yes": {"male":0, "female":0,"eunuch":0},
-				"no": {"male":0, "female":0,"eunuch":0}},
-			"location":{"yes": {},
-				"no": {}},
-			"age":{"yes": {},
-				"no": {}},
-			"education":{"yes": { "HS":0,"CO":0,"GS":0},
-					"no": { "HS":0,"CO":0,"GS":0}},
-			"relationship":{"yes": {},
-				"no": {}}
-			}
+    data = {"gender":
+                {"yes": {"male":0, "female":0,"eunuch":0},
+                "no": {"male":0, "female":0,"eunuch":0}},
+            "location":{"yes": {},
+                "no": {}},
+            "age":{"yes": {},
+                "no": {}},
+            "education":{"yes": { "HS":0,"CO":0,"GS":0},
+                    "no": { "HS":0,"CO":0,"GS":0}},
+            "relationship":{"yes": {},
+                "no": {}}
+            }
 
-	for r in product_ratings:
-		person = r.rater
-		if r.liked:
-			liked = "yes"
-		else:
-			liked = "no"
+    for r in product_ratings:
+        person = r.rater
+        if r.liked:
+            liked = "yes"
+        else:
+            liked = "no"
 
-		if person.gender not in ["male","female"]:
-			data["gender"][liked]["eunuch"] += 1
-		else:
-			data["gender"][liked][person.gender] += 1
+        if person.gender not in ["male","female"]:
+            data["gender"][liked]["eunuch"] += 1
+        else:
+            data["gender"][liked][person.gender] += 1
 
-		if person.location in data["location"][liked]:
-			data["location"][liked][person.location] += 1
-		else:
-			data["location"][liked][person.location] = 1
+        if person.location in data["location"][liked]:
+            data["location"][liked][person.location] += 1
+        else:
+            data["location"][liked][person.location] = 1
 
-		if person.age in data["age"][liked]:
-			data["age"][liked][person.age] += 1
-		else:
-			data["age"][liked][person.age] = 1
+        if person.age in data["age"][liked]:
+            data["age"][liked][person.age] += 1
+        else:
+            data["age"][liked][person.age] = 1
 
-		if person.education in data["education"][liked]:
-			data["education"][liked][person.education] += 1
-		else:
-			data["education"][liked][person.education] = 1
+        if person.education in data["education"][liked]:
+            data["education"][liked][person.education] += 1
+        else:
+            data["education"][liked][person.education] = 1
 
-		if person.relationship_status in data["relationship"][liked]:
-			data["relationship"][liked][person.relationship_status] += 1
-		else:
-			data["relationship"][liked][person.relationship_status] = 1
+        if person.relationship_status in data["relationship"][liked]:
+            data["relationship"][liked][person.relationship_status] += 1
+        else:
+            data["relationship"][liked][person.relationship_status] = 1
 
-	return HttpResponse(json.dumps(data),
+    return HttpResponse(json.dumps(data),
                         content_type="application/json")
 
 
@@ -185,7 +195,7 @@ def comment(request,pid):
 	if not body:
 		raise Http404("Must pass a body of the comment")
 	currentUserProfile = request.user.userprofile
-	comment_time = 
+	comment_time =
 	com = Comment.objects.create(product=p,
                                    text=body,
                                    comment_time=datetime.datetime.now(),
