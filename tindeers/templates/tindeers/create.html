@@ -18,7 +18,7 @@
           type: "POST",
           url: url,
           data: post_data,
-          success: function(res){console.log(res)}
+          success: function(res){console.log(res);window.location.href = "/manage";}
         });
     });</script>
 {% endblock %}
