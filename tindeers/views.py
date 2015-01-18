@@ -200,10 +200,17 @@ def aggregate(request,pid):
         else:
             data["age"][liked][person.age] = 1
 
-        if person.education in data["education"][liked]:
-            data["education"][liked][person.education] += 1
+        if person.education == "College":
+            edu = "CO"
+        elif person.education == "Graduate School":
+            edu = "GS"
         else:
-            data["education"][liked][person.education] = 1
+            edu = "HS"
+
+        if edu in data["education"][liked]:
+            data["education"][liked][edu] += 1
+        else:
+            data["education"][liked][edu] = 1
 
         if person.relationship_status in data["relationship"][liked]:
             data["relationship"][liked][person.relationship_status] += 1
