@@ -45,15 +45,13 @@ class UserProfile(models.Model):
         (WIDOWED, 'Widowed'),
     )
 
-
-
     user = models.OneToOneField(User)
     age = models.IntegerField(null=True)
     location = models.CharField(max_length=255, blank=True)
     gender = models.CharField(max_length=10,
                               default=EUNUCH)
     education = models.CharField(max_length=20,
-                              default='High School')
+                                 default='High School')
     relationship_status = models.CharField(max_length=100,
                                            default=UNKNOWN)
 
@@ -80,18 +78,21 @@ class Product(models.Model):
 
     creator = models.ForeignKey(UserProfile, related_name='my_products')
     title = models.CharField(max_length=60)
-    description = models.CharField(max_length=120)
+    description = models.CharField(max_length=160)
     product_link = models.URLField(blank=True)
     video_link = models.CharField(max_length=100)
     raters = models.ManyToManyField(UserProfile,
                                     through=Rating,
                                     related_name='my_rated_products')
 
+    def __unicode__(self):
+        return self.title
+
 
 class Comment(models.Model):
     """ Represents a comment on a product """
 
     product = models.ForeignKey(Product)
-    text = models.TextField()
+    text = models.TextField(max_length=200)
     comment_time = models.DateTimeField()
     author = models.ForeignKey(UserProfile)

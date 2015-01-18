@@ -68,7 +68,12 @@ def logout_view(request):
 
 @login_required
 def explore(request):
-    return render(request, 'tindeers/swiper.html', {'explore': 'active'})
+    uprofile = request.user.userprofile
+    dont_get_these = uprofile.my_products.values_list('pk', flat=True)
+    dont_get_these |= uprofile.my_rated_products.values_list('pk', flat=True)
+    product = Product.objects.exclude(id__in=dont_get_these).first()
+    return render(request, 'tindeers/swiper.html', {'explore': 'active',
+                                                    'product': product})
 
 
 @login_required
@@ -122,7 +127,7 @@ def vote(request):
     if not pid or not liked:
         raise Http404("Must pass both a Product ID and a vote")
     prod = Product.objects.get(pk=int(pid))
-    if prod.raters.filter(user=currentUserProfile).filter(creator=currentUserProfile).exists():
+    if prod.creator.pk == currentUserProfile.pk or prod.raters.filter(user=currentUserProfile).exists():
         return HttpResponse(json.dumps({'error':'Cannot vote again for this product'}),
                             content_type="application/json")
     else:
@@ -201,11 +206,12 @@ def comment(request,pid):
     body = request.POST.get('msg', None)
     if not body:
         raise Http404("Must pass a body of the comment")
+    if not 0 < len(body) < 200:
+        raise HttpResponse("Need a body", status_code=400)
     currentUserProfile = request.user.userprofile
-    comment_time = now()
     com = Comment.objects.create(product=p,
                                    text=body,
-                                   comment_time=datetime.datetime.now(),
+                                   comment_time=now(),
                                    author=currentUserProfile)
     com.save()
     response_data = {}
