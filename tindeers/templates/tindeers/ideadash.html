@@ -16,7 +16,11 @@
               <h3 class="panel-title">Response by Gender</h3>
             </div>
             <div class="panel-body">
-              <canvas id="GenderChart" width="345" height="250"></canvas>
+              <canvas id="genderChart" width="345" height="250"></canvas>
+              <div class="btn-group" role="group" >
+                <button type="button" id="yesGenderButton" class="btn btn-default">Yes</button>
+                <button type="button" id="noGenderButton" class="btn btn-default">No</button>
+              </div>
             </div>
           </div>
         </div>
@@ -26,7 +30,11 @@
               <h3 class="panel-title">Response by Age</h3>
             </div>
             <div class="panel-body">
-              <canvas id="AgeChart" width="345" height="250"></canvas>
+              <canvas id="ageChart" width="345" height="250"></canvas>
+              <div class="btn-group" role="group" >
+                <button type="button" id="yesAgeButton" class="btn btn-default">Yes</button>
+                <button type="button" id="noAgeButton" class="btn btn-default">No</button>
+              </div>
             </div>
           </div>
         </div>
@@ -38,7 +46,11 @@
               <h3 class="panel-title">Response by Location</h3>
             </div>
             <div class="panel-body">
-              <canvas id="LocationChart" width="345" height="250"></canvas>
+              <canvas id="locationChart" width="345" height="250"></canvas>
+              <div class="btn-group" role="group" >
+                <button type="button" id="yesLocationButton" class="btn btn-default">Yes</button>
+                <button type="button" id="noLocationButton" class="btn btn-default">No</button>
+              </div>
             </div>
           </div>
         </div>
@@ -48,7 +60,11 @@
               <h3 class="panel-title">Response by Education</h3>
             </div>
             <div class="panel-body">
-              <canvas id="EducationChart" width="345" height="250"></canvas>
+              <canvas id="educationChart" width="345" height="250"></canvas>
+              <div class="btn-group" role="group" >
+                <button type="button" id="yesEducationButton" class="btn btn-default">Yes</button>
+                <button type="button" id="noEducationButton" class="btn btn-default">No</button>
+              </div>
             </div>
           </div>
         </div>
@@ -60,7 +76,11 @@
               <h3 class="panel-title">Response by Relationship</h3>
             </div>
             <div class="panel-body">
-              <canvas id="RelationshipChart" width="345" height="250"></canvas>
+              <canvas id="relationshipChart" width="345" height="250"></canvas>
+              <div class="btn-group" role="group" >
+                <button type="button" id="yesRelationshipButton" class="btn btn-default">Yes</button>
+                <button type="button" id="yesRelationshipButton" class="btn btn-default">No</button>
+              </div>
             </div>
           </div>
         </div>
@@ -71,6 +91,10 @@
             </div>
             <div class="panel-body">
               <canvas id="GenericChart" width="345" height="250"></canvas>
+              <div class="btn-group" role="group" >
+                <button type="button" id="yesGenericButton" class="btn btn-default">Yes</button>
+                <button type="button" id="noGenericButton" class="btn btn-default">No</button>
+              </div>
             </div>
           </div>
         </div>
@@ -144,339 +168,290 @@
         </div>
       </div>
     <script>
+    var genderDataYes;
+    var genderDataNo;
+    var ageDataYes;
+    var ageDataNo;
+    var educationDataYes;
+    var educationDataNo;
+    var relationshipDataYes;
+    var relationshipDataNo;
+    var locationDataYes;
+    var locationDataNo;
+    var chartList;
+    var yesDataList;
+    var noDataList;
+    var genderCanvas;
+    var ageCanvas;
+    var educationCanvas;
+    var relationshipCanvas;
+    var locationCanvas;
+    var genderChart;
+    var ageChart;
+    var educationChart;
+    var relationshipChart;
+    var locationChart;
+    function dataVis(json_idea_data) {
       var data = jquery.parseJSON(json_idea_data)
+      function generateGenderData(genderData) {
+        return [
+          {
+            value: genderData.male,
+            color:"#87b265",
+            highlight: "#b0c65f",
+            label: "Male"
+          },
+          {
+            value: genderData.female,
+            color: "#BF7663",
+            highlight: "#CC845D",
+            label: "Female"
+          },
+          {
+            value: genderData.eunuch,
+            color: "#68c9b7",
+            highlight: "#6AE2DC",
+            label: "Other"
+          }
+        ]
+      }
+
+      function generateAgeData(ageData) {
+        var AgeRanges = {"-25":0, "26-35":0,"36-50":0,"51-65":0,"65+":0};
+        for (var key in data.age.yes) {
+          if (data.age[key] < 25) {
+            AgeRanges["-25"] += 1;
+          } else if (parseInt(key) > 25 && parseInt(key) <= 35) {
+            AgeRanges["26-35"] += 1;
+          } else if (parseInt(key) > 35 && parseInt(key) <= 50) {
+            AgeRanges["36-50"] += 1;
+          } else if (parseInt(key) > 50 && parseInt(key) <= 65) {
+            AgeRanges["51-65"] += 1;
+          } else (parseInt(key) >  65) {
+            AgeRanges["65+"] += 1;
+          }
+        }
+        return [
+          {
+            value: AgeRanges["-25"],
+            color:"#87b265",
+            highlight: "#b0c65f",
+            label: "Under 25"
+          },
+          {
+            value: AgeRanges["26-35"],
+            color:"#7178bf",
+            highlight: "#6E8DBF",
+            label: "26 to 35"
+          },
+          {
+            value: AgeRanges["36-50"],
+            color:"#68c9b7",
+            highlight: "#6AE2DC",
+            label: "36 to 50"
+          },
+          {
+            value: AgeRanges["51-65"],
+            color:"#C9B068",
+            highlight: "#C4AA71",
+            label: "51 to 65"
+          },
+          {
+            value: AgeRanges["65+"],
+            color:"#BF7663",
+            highlight: "#CC845D",
+            label: "Over 65"
+          }
+        ] 
+      }
+      function generateEducationData(educationData) {
+        [
+          {
+            value: educationData.HS,
+            color:"#87b265",
+            highlight: "#b0c65f",
+            label: "High School or Lower"
+          },
+          {
+            value: educationData.GS,
+            color:"#7178bf",
+            highlight: "#6E8DBF",
+            label: "Graduate School"
+          },
+          {
+            value: educationData.CO,
+            color:"#C9B068",
+            highlight: "#C4AA71",
+            label: "Undergraduate School"
+          }
+        ]
+      }
+      function generateRelationshipData(relationshipData) {
+        return [
+          {
+            value: relationshipData.UN,
+            color:"#87b265",
+            highlight: "#b0c65f",
+            label: "Unknown"
+          },
+          {
+            value: relationshipData.SI,
+            color:"#7178bf",
+            highlight: "#6E8DBF",
+            label: "Single"
+          },
+          {
+            value: relationshipData.RE,
+            color:"#C9B068",
+            highlight: "#C4AA71",
+            label: "Relationship"
+          },
+          {
+            value: relationshipData.EN,
+            color:"#7178bf",
+            highlight: "#6E8DBF",
+            label: "Engaged"
+          },
+          {
+            value: relationshipData.MA,
+            color:"#7178bf",
+            highlight: "#6E8DBF",
+            label: "Married"
+          },
+          {
+            value: relationshipData.CI,
+            color:"#7178bf",
+            highlight: "#6E8DBF",
+            label: "Civil Union"
+          },
+          {
+            value: relationshipData.DO,
+            color:"#7178bf",
+            highlight: "#6E8DBF",
+            label: "Domestic Partnership"
+          },
+          {
+            value: relationshipData.OP,
+            color:"#7178bf",
+            highlight: "#6E8DBF",
+            label: "Open Relationship"
+          },
+          {
+            value: relationshipData.CO,
+            color:"#7178bf",
+            highlight: "#6E8DBF",
+            label: "Complicated"
+          },
+          {
+            value: relationshipData.SE,
+            color:"#7178bf",
+            highlight: "#6E8DBF",
+            label: "Separated"
+          },
+          {
+            value: relationshipData.DI,
+            color:"#7178bf",
+            highlight: "#6E8DBF",
+            label: "Divorced"
+          },
+          {
+            value: relationshipData.WI,
+            color:"#7178bf",
+            highlight: "#6E8DBF",
+            label: "Widowed"
+          },
+        ]
+      }
+      function generateLocationData(locationData) {
+        var LocationLabels = [];
+        var LocationDataset = [];
+        for (i in data.location.yes){
+          LocationLabels.push(i);
+          LocationDataset.push(data.location.yes[i]);
+        } 
+        return {
+          labels: LocationLabels,
+          datasets: [
+              {
+                  label: "Locations that reported yes",
+                  fillColor: "rgba(220,220,220,0.5)",
+                  strokeColor: "rgba(220,220,220,0.8)",
+                  highlightFill: "rgba(220,220,220,0.75)",
+                  highlightStroke: "rgba(220,220,220,1)",
+                  data: LocationDataset
+              },
+          ]
+        };  
+      }
+      // datasets that are going to be pie charts
+      genderDataYes         = generateGenderData(data.gender.yes);
+      genderDataNo          = generateGenderData(data.gender.no);
+      ageDataYes            = generateAgeData(data.age.yes);
+      ageDataNo             = generateAgeData(data.age.no);
+      educationDataYes      = generateEducationData(data.education.yes);
+      educationDataNo       = generateEducationData(data.education.no);
+      relationshipDataYes   = generateRelationshipData(data.relationship.yes);
+      relationshipDataNo    = generateRelationshipData(data.relationship.no);
+      // dataset that is going to be a histogram
+      locationDataYes       = generateLocationData(data.location.yes);
+      locationDataNo        = generateLocationData(data.location.no);
       
-      var GenderDataYes = [
-        {
-          value: data.gender.yes.male,
-          color:"#87b265",
-          highlight: "#b0c65f",
-          label: "Male"
-        },
-        {
-          value: data.gender.yes.female,
-          color: "#BF7663",
-          highlight: "#CC845D",
-          label: "Female"
-        },
-        {
-          value: data.gender.yes.eunuch,
-          color: "#68c9b7",
-          highlight: "#6AE2DC",
-          label: "Other"
-        }
-      ]
+      // an organized list of the canvas IDs,and the DataYes/No representations
+      chartList   = ["genderChart","ageChart","educationChart","relationshipChart","locationChart"];
+      yesDataList = [genderDataYes, ageDataYes, educationDataYes, relationshipDataYes, locationDataYes,];
+      noDataList  = [genderDataNo, ageDataNo, educationDataNo, relationshipDataNo, locationDataNo];
 
-      var GenderDataNo = [
-        {
-          value: data.gender.no.male,
-          color:"#87b265",
-          highlight: "#b0c65f",
-          label: "Male"
-        },
-        {
-          value: data.gender.no.female,
-          color: "#BF7663",
-          highlight: "#CC845D",
-          label: "Female"
-        },
-        {
-          value: data.gender.no.eunuch,
-          color: "#68c9b7",
-          highlight: "#6AE2DC",
-          label: "Other"
-        }
-      ]
+      genderCanvas       = document.getElementById("genderChart").getContext("2d");
+      ageCanvas          = document.getElementById("ageChart").getContext("2d");
+      educationCanvas    = document.getElementById("educationChart").getContext("2d");
+      relationshipCanvas = document.getElementById("relationshipChart").getContext("2d");
+      locationCanvas     = document.getElementById("locationChart").getContext("2d");
+      
+      genderChart        = new Chart(genderCanvas).Pie(genderDataYes);
+      ageChart           = new Chart(ageCanvas).Pie(ageDataYes);
+      educationChart     = new Chart(educationCanvas).Pie(educationDataYes);
+      relationshipChart  = new Chart(relationshipCanvas).Pie(relationshipDataYes);
+      locationChart      = new Chart(locationCanvas).Bar(locationDataYes);
 
-      var AgeRangesYes = {"-25":0, "26-35":0,"36-50":0,"51-65":0,"65+":0}
-      var AgeRangesNo = {"-25":0, "26-35":0,"36-50":0,"51-65":0,"65+":0}
-      for (var key in data.age.yes) {
-        if (data.age[key] < 25) {
-          AgeRangesYes["-25"] += 1;
-        } else if (parseInt(key) > 25 && parseInt(key) <= 35) {
-          AgeRangesYes["26-35"] += 1;
-        } else if (parseInt(key) > 35 && parseInt(key) <= 50) {
-          AgeRangesYes["36-50"] += 1;
-        } else if (parseInt(key) > 50 && parseInt(key) <= 65) {
-          AgeRangesYes["51-65"] += 1;
-        } else (parseInt(key) >  65) {
-          AgeRangesYes["65+"] += 1;
-        }
-      }
-      for (var key in data.age.no) {
-        if (data.age[key] < 25) {
-          AgeRangesNo["-25"] += 1;
-        } else if (parseInt(key) > 25 && parseInt(key) <= 35) {
-          AgeRangesNo["26-35"] += 1;
-        } else if (parseInt(key) > 35 && parseInt(key) <= 50) {
-          AgeRangesNo["36-50"] += 1;
-        } else if (parseInt(key) > 50 && parseInt(key) <= 65) {
-          AgeRangesNo["51-65"] += 1;
-        } else (parseInt(key) >  65) {
-          AgeRangesNo["65+"] += 1;
-        }
-      }
-      var AgeDataYes = [
-        {
-          value: AgeRangesYes["-25"],
-          color:"#87b265",
-          highlight: "#b0c65f",
-          label: "Under 25"
-        },
-        {
-          value: AgeRangesYes["26-35"],
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "26 to 35"
-        },
-        {
-          value: AgeRangesYes["36-50"],
-          color:"#68c9b7",
-          highlight: "#6AE2DC",
-          label: "36 to 50"
-        },
-        {
-          value: AgeRangesYes["51-65"],
-          color:"#C9B068",
-          highlight: "#C4AA71",
-          label: "51 to 65"
-        },
-        {
-          value: AgeRangesYes["65+"],
-          color:"#BF7663",
-          highlight: "#CC845D",
-          label: "Over 65"
-        }
-      ] 
-      var AgeDataNo = [
-        {
-          value: AgeRangesNo["-25"],
-          color:"#87b265",
-          highlight: "#b0c65f",
-          label: "Under 25"
-        },
-        {
-          value: AgeRangesNo["26-35"],
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "26 to 35"
-        },
-        {
-          value: AgeRangesNo["36-50"],
-          color:"#68c9b7",
-          highlight: "#6AE2DC",
-          label: "36 to 50"
-        },
-        {
-          value: AgeRangesNo["51-65"],
-          color:"#C9B068",
-          highlight: "#C4AA71",
-          label: "51 to 65"
-        },
-        {
-          value: AgeRangesNo["65+"],
-          color:"#BF7663",
-          highlight: "#CC845D",
-          label: "Over 65"
-        }
-      ] 
+    }
 
-      var EduDataYes = [
-        {
-          value: data.education.yes.HS,
-          color:"#87b265",
-          highlight: "#b0c65f",
-          label: "High School or Lower"
-        },
-        {
-          value: data.education.yes.GS,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Graduate School"
-        },
-        {
-          value: data.education.yes.CO,
-          color:"#C9B068",
-          highlight: "#C4AA71",
-          label: "Undergraduate School"
-        }
-      ]
 
-      var EduDataNo = [
-        {
-          value: data.education.no.HS,
-          color:"#87b265",
-          highlight: "#b0c65f",
-          label: "High School or Lower"
-        },
-        {
-          value: data.education.no.GS,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Graduate School"
-        },
-        {
-          value: data.education.no.CO,
-          color:"#C9B068",
-          highlight: "#C4AA71",
-          label: "Undergraduate School"
-        }
-      ]
 
-      var RelationDataYes [
-        {
-          value: data.relationship.yes.UN,
-          color:"#87b265",
-          highlight: "#b0c65f",
-          label: "Unknown"
-        },
-        {
-          value: data.relationship.yes.SI,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Single"
-        },
-        {
-          value: data.relationship.yes.RE,
-          color:"#C9B068",
-          highlight: "#C4AA71",
-          label: "Relationship"
-        },
-        {
-          value: data.relationship.yes.EN,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Engaged"
-        },
-        {
-          value: data.relationship.yes.MA,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Married"
-        },
-        {
-          value: data.relationship.yes.CI,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Civil Union"
-        },
-        {
-          value: data.relationship.yes.DO,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Domestic Partnership"
-        },
-        {
-          value: data.relationship.yes.OP,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Open Relationship"
-        },
-        {
-          value: data.relationship.yes.CO,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Complicated"
-        },
-        {
-          value: data.relationship.yes.SE,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Separated"
-        },
-        {
-          value: data.relationship.yes.DI,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Divorced"
-        },
-        {
-          value: data.relationship.yes.WI,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Widowed"
-        },
-      ]
-      var RelationDataNo [
-        {
-          value: data.relationship.no.UN,
-          color:"#87b265",
-          highlight: "#b0c65f",
-          label: "Unknown"
-        },
-        {
-          value: data.relationship.no.SI,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Single"
-        },
-        {
-          value: data.relationship.no.RE,
-          color:"#C9B068",
-          highlight: "#C4AA71",
-          label: "Relationship"
-        },
-        {
-          value: data.relationship.no.EN,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Engaged"
-        },
-        {
-          value: data.relationship.no.MA,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Married"
-        },
-        {
-          value: data.relationship.no.CI,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Civil Union"
-        },
-        {
-          value: data.relationship.no.DO,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Domestic Partnership"
-        },
-        {
-          value: data.relationship.no.OP,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Open Relationship"
-        },
-        {
-          value: data.relationship.no.CO,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Complicated"
-        },
-        {
-          value: data.relationship.no.SE,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Separated"
-        },
-        {
-          value: data.relationship.no.DI,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Divorced"
-        },
-        {
-          value: data.relationship.no.WI,
-          color:"#7178bf",
-          highlight: "#6E8DBF",
-          label: "Widowed"
-        },
-      ]
-      var chart_list = ["GenderChart","AgeChart","LocationChart","EducationChart","RelationshipChart","GenericChart"]
-      for (i in chart_list) {
-        var ctx = document.getElementById(chart_list[i]).getContext("2d");
-        
-        var myPieChart = new Chart(ctx).Pie(data)
-      }
+    $(document).ready(function(){
+      $("#yesGenderButton").click(function(){
+        genderChart = new Chart(genderCanvas).Pie(genderDataYes);
+      });
+      $("#noGenderButton").click(function(){
+        genderChart = new Chart(genderCanvas).Pie(genderDataNo);
+      });
+      $("#yesAgeButton").click(function(){
+        ageChart = new Chart(ageCanvas).Pie(ageDataYes);
+      });
+      $("#noAgeButton").click(function(){
+        ageChart = new Chart(ageCanvas).Pie(ageDataNo);
+      });
+      $("#yesEducationButton").click(function(){
+        educationChart = new Chart(educationCanvas).Pie(educationDataYes);
+      });
+      $("#noEducationButton").click(function(){
+        educationChart = new Chart(educationCanvas).Pie(educationDataNo);
+      });
+      $("#yesRelationshipButton").click(function(){
+        relationshipChart = new Chart(relationshipCanvas).Pie(relationshipDataYes);
+      });
+      $("#noRelationshipButton").click(function(){
+        relationshipChart = new Chart(relationshipCanvas).Pie(relationshipDataNo);
+      });
+      $("#yesLocationButton").click(function(){
+        LocationChart = new Chart(LocationCanvas).Bar(LocationDataYes);
+      });
+      $("#noLocationButton").click(function(){
+        LocationChart = new Chart(LocationCanvas).Bar(LocationDataNo);
+      });
+
+//      dataVis()
+
+    });
       
     </script>
 {% endblock %}
