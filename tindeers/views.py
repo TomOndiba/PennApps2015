@@ -195,3 +195,23 @@ def comment(request,pid):
 	response_data["comment"] = com.pk
     return HttpResponse(json.dumps(response_data),
                         content_type="application/json")
+
+
+#emails the product link to all those interested in the product
+@login_required
+def email(request,pid):
+	p = get_object_or_404(Product, pk=pid)
+	import mandrill
+	mandrill_client = mandrill.Mandrill(MANDRILL_API_KEY)
+	text = """This is dg sample text"""
+	users = [{"type": "to", "email": "daniel.griffin@tufts.edu", "name": "Daniel Griffin"}]
+# users: [{"type": "to", "email": "daniel.griffin@tufts.edu", "name": "Daniel Griffin"}]
+
+	msg = json.loads("""{"async": false, "message": {"recipient_metadata": [{"values": {"user_id": 1}, "rcpt": "recipient.email@example.com"}], "text": "Example text content", "merge_vars": [{"rcpt": "recipient.email@example.com", "vars": [{"content": "merge2 content", "name": "merge2"}]}], "inline_css": null, "images": [], "preserve_recipients": null, "track_clicks": null, "view_content_link": null, "url_strip_qs": null, "merge": true, "from_email": "contact@pleaseinform.message", "to": [{"type": "to", "email": "daniel.griffin@tufts.edu", "name": "Daniel Griffin"}], "html": "<p>Example HTML content</p>", "auto_html": null, "subject": "example subject", "auto_text": null, "metadata": {"campaign": "contact"}, "from_name": "Clark Apps", "tags": ["updates"], "global_merge_vars": [{"content": "merge1 content", "name": "merge1"}], "important": false, "signing_domain": null, "merge_language": "mailchimp", "tracking_domain": null, "track_opens": null, "attachments": [], "headers": {"Reply-To": "contact@pleaseinform.message"}, "return_path_domain": null}, "send_at": false, "key": "Nq2-XlM2hNp7LGcbRt8awA", "ip_pool": "Main Pool"}""")
+	j["text"] = text
+	j["to"] = users
+	j["html"] = "<p>" + text + "</p>"
+	j["subject"] = "Clark Apps Update!"
+	result = mandrill_client.messages.send(message=msg, async=False, ip_pool='Main Pool', send_at='example send_at')
+
+
