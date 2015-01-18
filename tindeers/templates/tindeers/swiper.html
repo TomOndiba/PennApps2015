@@ -38,6 +38,7 @@
           <button type="button" id="yaybtn" class="btn btn-lg btn-success">Yay</button>
           <button type="button" id="naybtn" class="btn btn-lg btn-danger">Nay</button>
           <button type="button" id="nextbtn" class="hidden btn btn-lg btn-info" style="float: right;">Next > </button>
+          <button type="button" id="nextbtn" class="hidden btn btn-lg btn-info" style="float: right;">Next > </button>
           <br/>
       </div>
       <br/>
@@ -101,7 +102,6 @@
             e.preventDefault();
             location.reload();
         });
-
         $('#submitcomment').click(function(e) {
             var comment = $('#desc').val(),
                 post_data = {
