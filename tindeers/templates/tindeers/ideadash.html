@@ -227,7 +227,7 @@
             AgeRanges["36-50"] += 1;
           } else if (parseInt(key) > 50 && parseInt(key) <= 65) {
             AgeRanges["51-65"] += 1;
-          } else (parseInt(key) >  65) {
+          } else {
             AgeRanges["65+"] += 1;
           }
         }
@@ -449,9 +449,14 @@
         LocationChart = new Chart(LocationCanvas).Bar(LocationDataNo);
       });
 
-//      dataVis()
+      $.ajax({
+          type: "POST",
+          url: "/aggregate/{{product.id}}",
+          success: function(res){
+            dataVis(res);
+          }
 
-    });
-      
+      });
+  });    
     </script>
 {% endblock %}
