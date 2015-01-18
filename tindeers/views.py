@@ -87,8 +87,18 @@ def feedback(request, product_id):
     if p.creator.user.pk != request.user.pk:
         return render(request, 'tindeers/not_yours.html', {})
 
-    return render(request, 'tindeers/ideadash.html', {'product': p,
-                                                      'mydea': 'active'})
+    positive_reviews = UserProfile.objects.filter(my_rated_products__pk=p.pk,
+                                                  rating__liked=True)
+    negative_reviews = UserProfile.objects.filter(my_rated_products__pk=p.pk,
+                                                  rating__liked=False)
+
+    template_params = {
+        'product': p,
+        'mydea': 'active',
+        'negative_reviews': negative_reviews,
+        'positive_reviews': positive_reviews
+    }
+    return render(request, 'tindeers/ideadash.html', template_params)
 
 
 @login_required
